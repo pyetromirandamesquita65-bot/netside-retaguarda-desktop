@@ -22,7 +22,7 @@ const tableMap = {
   },
   orders: {
     table: "orders",
-    fields: ["number", "client", "total", "discount", "status", "created_at"],
+    fields: ["number", "client", "total", "discount", "status", "payment_method", "created_at"],
     order: "id DESC"
   },
   service_orders: {

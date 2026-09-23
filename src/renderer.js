@@ -31,8 +31,10 @@ function keyboardShortcuts(event) {
   if (event.key === "Escape") { closeModal(); if (state.module) openModule(state.module); else showWelcome(); }
   if (event.key === "F12") { event.preventDefault(); if (state.module === "orders") openPayment(); }
   if (event.key === "Enter" && document.activeElement?.dataset?.skipClient) {
+    event.preventDefault();
     state.enterCount += 1;
-    if (state.enterCount >= 5) { state.order.client = "Consumidor final"; document.activeElement.value = state.order.client; setStatus("Cliente pulado após 5x ENTER"); }
+    if (state.enterCount >= 5) { state.order.client = "Consumidor final"; document.activeElement.value = state.order.client; setStatus("Cliente pulado após 5x ENTER"); showProductStep(state.order.module); }
+    else setStatus(`${state.enterCount}/5 ENTER para pular o cliente`);
   }
 }
 
@@ -72,6 +74,7 @@ async function renderModule(module, search = "") {
   $("#content").innerHTML = `<div class="panel-header"><h2>${title}</h2><div class="panel-actions">${table ? `<button class="btn primary" id="new-record">＋ Novo</button>` : ""}<button class="btn dark" id="back-home">⌂ Início</button></div></div>
     ${module === "nfe" || module === "nfce" ? simulationPanel(title) : module === "manager" ? managerPanel() : `<div class="toolbar"><div class="search-box">⌕ <input id="module-search" value="${esc(search)}" placeholder="Pesquisar por nome, código ou documento" /></div><span>${rows.length} registro(s)</span></div>${renderTable(table, columns, rows)}`}`;
   $("#back-home").addEventListener("click", showWelcome);
+  $("#simulate-doc")?.addEventListener("click", () => setStatus("Documento fiscal simulado localmente. Nenhum envio à SEFAZ foi realizado."));
   if (table) {
     $("#new-record").addEventListener("click", () => openCrudModal(module, null));
     $("#module-search").addEventListener("input", (event) => renderModule(module, event.target.value));
@@ -134,6 +137,7 @@ async function showProductStep(module) {
     $("#product-results").innerHTML = products.slice(0, 6).map((product) => `<button class="rail-item product-result" data-product="${product.id}"><span>${esc(product.code)}</span> ${esc(product.name)} · ${money(product.price)}</button>`).join("") || `<small>Nenhum produto encontrado.</small>`;
     document.querySelectorAll(".product-result").forEach((button) => button.addEventListener("click", () => addProduct(products.find((product) => String(product.id) === button.dataset.product))));
   });
+  wireItemActions();
   $("#modal .modal-footer").innerHTML = `<button type="button" class="btn" id="cancel-document">Cancelar</button><button type="button" class="btn primary" id="finish-document">Salvar ${moduleLabel(module)}</button>`;
   $("#cancel-document").addEventListener("click", closeModal);
   $("#finish-document").addEventListener("click", () => saveDocument(module));
@@ -143,7 +147,17 @@ function addProduct(product) {
   const existing = state.order.items.find((item) => item.code === product.code);
   if (existing) existing.quantity += 1;
   else state.order.items.push({ code: product.code, name: product.name, price: Number(product.price || 0), quantity: 1 });
-  $("#item-list").innerHTML = renderItems(); $("#document-total").textContent = money(orderTotal()); setStatus(`Produto ${product.name} adicionado.`);
+  $("#item-list").innerHTML = renderItems(); wireItemActions(); $("#document-total").textContent = money(orderTotal()); setStatus(`Produto ${product.name} adicionado.`);
+}
+function wireItemActions() {
+  document.querySelectorAll("[data-quantity]").forEach((input) => input.addEventListener("input", () => {
+    state.order.items[Number(input.dataset.quantity)].quantity = Math.max(1, Number(input.value || 1));
+    $("#item-list").innerHTML = renderItems(); wireItemActions(); $("#document-total").textContent = money(orderTotal());
+  }));
+  document.querySelectorAll("[data-remove-item]").forEach((button) => button.addEventListener("click", () => {
+    state.order.items.splice(Number(button.dataset.removeItem), 1);
+    $("#item-list").innerHTML = renderItems(); wireItemActions(); $("#document-total").textContent = money(orderTotal());
+  }));
 }
 function renderItems() {
   if (!state.order.items.length) return `<div class="empty-state"><strong>Pedido vazio</strong>Pesquise e adicione produtos.</div>`;
