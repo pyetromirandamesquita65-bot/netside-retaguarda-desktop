@@ -1,0 +1,55 @@
+{
+  "name": "@workspace/netside-retaguarda",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NetSide Retaguarda - ERP desktop para Windows",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "build": "electron-builder --win nsis",
+    "build:dir": "electron-builder --dir",
+    "db:smoke": "node scripts/db-smoke.js"
+  },
+  "build": {
+    "appId": "br.netside.retaguarda",
+    "productName": "NetSide Retaguarda",
+    "artifactName": "NetSide-Retaguarda-Setup.exe",
+    "asar": true,
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release",
+      "buildResources": "assets"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/netside.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "NetSide Retaguarda",
+      "uninstallDisplayName": "NetSide Retaguarda"
+    }
+  },
+  "dependencies": {
+    "better-sqlite3": "11.10.0",
+    "electron": "39.2.7"
+  },
+  "devDependencies": {
+    "electron-builder": "26.0.12"
+  }
+}

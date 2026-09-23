@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <rect width="256" height="256" rx="22" fill="#252b30"/>
+  <path d="M34 70h188v116H34z" fill="#dfe5e8" stroke="#121517" stroke-width="8"/>
+  <path d="M58 145l24-42 25 30 28-50 31 62" fill="none" stroke="#3c934c" stroke-width="12"/>
+  <circle cx="181" cy="89" r="14" fill="#d7aa2b"/>
+  <text x="128" y="218" text-anchor="middle" font-family="Arial" font-size="26" font-weight="bold" fill="#e65058">NET</text>
+</svg>

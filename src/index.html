@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:;" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NetSide Retaguarda</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app" class="app-shell">
+      <header class="topbar">
+        <div class="brand-mark"><span class="brand-net">NET</span><span class="brand-side">Side</span><small>RETAGUARDA</small></div>
+        <div class="title-area"><strong>NetSide Retaguarda</strong><span id="clock"></span></div>
+        <div class="window-actions"><button>_</button><button>□</button><button class="close">×</button></div>
+      </header>
+      <main class="workspace">
+        <section class="main-stage">
+          <div class="shortcut-row" id="shortcut-row"></div>
+          <div class="welcome" id="welcome">
+            <div class="welcome-logo"><span>NET</span>Side<small>retaguarda</small></div>
+            <h1>Bem-vindo ao sistema</h1>
+            <p>Selecione um módulo na barra inferior para começar.</p>
+            <div class="quick-stats" id="quick-stats"></div>
+          </div>
+          <section id="content" class="content-panel hidden"></section>
+        </section>
+        <aside class="right-rail">
+          <div class="rail-heading"><span class="rail-led"></span> ACESSO RÁPIDO</div>
+          <button class="rail-item" data-module="cash"><span class="rail-icon">▥</span> Movimento de Caixa</button>
+          <button class="rail-item" data-module="entries"><span class="rail-icon">▤</span> SPED Fiscal | Config.</button>
+          <button class="rail-item" data-module="entries"><span class="rail-icon">▤</span> SPED Pis-Cofins</button>
+          <button class="rail-item" data-module="entries"><span class="rail-icon">▰</span> Transportadoras</button>
+          <button class="rail-item" data-module="employees"><span class="rail-icon">♟</span> Usuários | Ctrl</button>
+          <div class="rail-search">⌕ <input id="global-search" placeholder="Pesquisar no sistema" /></div>
+          <button class="rail-big" data-module="manager">⌂</button>
+          <div class="session-box"><b>Operador:</b> Administrador<br /><span>Caixa 01 · Loja principal</span></div>
+        </aside>
+      </main>
+      <nav class="module-bar" id="module-bar"></nav>
+      <footer class="statusbar"><span>NetSide Sistemas Comerciais</span><span id="status-message">Pronto</span><span>F1 Ajuda&nbsp;&nbsp; | &nbsp;&nbsp;ESC Voltar&nbsp;&nbsp; | &nbsp;&nbsp;F12 Faturar</span></footer>
+    </div>
+    <div id="modal-root"></div>
+    <script src="renderer.js"></script>
+  </body>
+</html>
